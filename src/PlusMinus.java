@@ -40,6 +40,8 @@ public class PlusMinus {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(bufferedReader.readLine().trim());
+        //int n = 6;
+        //List<Integer> arr = Arrays.asList(-4,3,-9,0,4,1);
 
         List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
                 .map(Integer::parseInt)
