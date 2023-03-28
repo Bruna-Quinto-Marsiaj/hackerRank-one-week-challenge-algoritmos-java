@@ -33,8 +33,8 @@ class GridChallenge {
             al.add(s);
         }
         //al = [abcde, fghij, klmno, pqrst, uvwxy]
+        int size = al.get(0).length();
         for(int i=1; i<al.size(); i++){
-            int size;
             for(int j = 0; j<size; j++){
                 if(al.get(i-1).charAt(j)>al.get(i).charAt(j)){
                     return "NO";
@@ -46,7 +46,7 @@ class GridChallenge {
 
 }
 
-public class Solution {
+class Solution2 {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
