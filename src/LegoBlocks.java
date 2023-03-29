@@ -1,141 +1,63 @@
+import java.util.*;
 
-import java.io.*;
-        import java.math.*;
-        import java.security.*;
-        import java.text.*;
-        import java.util.*;
-        import java.util.concurrent.*;
-        import java.util.function.*;
-        import java.util.regex.*;
-        import java.util.stream.*;
-        import static java.util.stream.Collectors.joining;
-        import static java.util.stream.Collectors.toList;
-
-class LegoBlocks {
-
-    /*
-     * Complete the 'legoBlocks' function below.
-     *
-     * The function is expected to return an INTEGER.
-     * The function accepts following parameters:
-     *  1. INTEGER n
-     *  2. INTEGER m
-     */
-
-    public static int legoBlocks(int n, int m) {
-        // Write your code here
-        if (n < 2 || m < 1) return 0;
-        if (m == 1) return 1;
-
-        // - Step 1: consider only one row
-        long [] total = new long [m + 1];
-
-        // set a flag (-1) to calculate only once
-        for (int i = 0; i < total.length; i++)
-            total[i] = -1;
-
-        fillTot(total, m);
-
-        // - Step 2: extend to all rows
-        for (int i = 0; i < total.length; i++) {
-            long tmp = 1;
-            for (int j = 0; j < n; j++) {
-                tmp = (tmp * total[i]) % MOD;
-            }
-            total[i] = tmp;
-        }
-
-        // - Step 3: subtract the vertically unstable
-        // don't calculate the vertically unstable at first
-        long [] result = new long [m + 1];
-        // set a flag (-1) to calculate only once
-        for (int i = 0; i < result.length; i++)
-            result[i] = -1;
-
-        getResult(total, result, m);
-
-        // solution 1:
-        // - subtract the vertically unstable
-        // return (int) ((total[m] - result[m]) % MOD);
-
-        // solution 2:
-        // - return the result
-        return (int) (result[m] % MOD);
+public class LegoBlocks {
+    int md=1000000007;
+    int[][] ways = new int[1001][1001];
+    int[][] waysRestrict = new int[1001][1001];
+    public LegoBlocks(){
+        for(int[] w : ways) Arrays.fill(w, -1);
+        for(int[] w : waysRestrict) Arrays.fill(w, -1);
     }
-
-    static long MOD = 1000000000 + 7;
-
-    // calculate unstable by splitting it into two parts and
-    // multiplying unstable part with total part
-    static long getResult(long [] total, long [] result, int i) {
-        if (result[i] == -1) {
-            if (i == 1) {
-                // solution 1
-                // result[i] = 0;
-
-                // solution 2
-                result[i] = 1;
+    public int solve(int n, int m)
+    {
+        if (ways[n][m] != -1) return ways[n][m];
+        long ans;
+        if (m==1) ans = 1;
+        else if (n==1){
+            if (m<=4) {
+                ans = 2*solve(1,m-1);
             }
             else {
-                // solution 1
-                // result[i] = 0;
-                // for (int j = 1; j < i; j++) {
-                //     result[i] += ((total[j] - getResult(total, result, j)) * total[i - j]) % MOD;
-                // }
-
-                // solution 2
-                result[i] = total[i];
-                for (int j = 1; j < i; j++) {
-                    result[i] -= (getResult(total, result, j) * total[i - j]) % MOD;
-                }
+                ans = solve(1,m-1);
+                ans = (ans + solve(1,m-2))%md;
+                ans = (ans + solve(1,m-3))%md;
+                ans = (ans + solve(1,m-4))%md;
             }
         }
-
-        return result[i];
-    }
-
-    // fill totals partially
-    static long fillTot(long [] total, int i) {
-        if (i < 0) return 0;
-
-        if (total[i] == -1) {
-            if (i == 0 || i == 1)
-                total[i] = 1;
-            else
-                total[i] = (fillTot(total, i - 1) + fillTot(total, i - 2) + fillTot(total, i - 3) + fillTot(total, i - 4)) % MOD;
+        else{
+            ans = 1; int one = solve(1,m);
+            for (int i=0; i<n; i++) ans = (ans * one)%md;
         }
-
-        return total[i];
+        ways[n][m] = (int)ans;
+        return ways[n][m];
     }
+    public int solveRestrict(int n, int m)
+    {
+        if (waysRestrict[n][m] != -1) return waysRestrict[n][m];
+        long ans;
+        if (m==1) ans = 1;
 
-}
-
-class Solution5 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-
-        int t = Integer.parseInt(bufferedReader.readLine().trim());
-
-        IntStream.range(0, t).forEach(tItr -> {
-            try {
-                String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-                int n = Integer.parseInt(firstMultipleInput[0]);
-
-                int m = Integer.parseInt(firstMultipleInput[1]);
-
-                int result = LegoBlocks.legoBlocks(n, m);
-
-                bufferedWriter.write(String.valueOf(result));
-                bufferedWriter.newLine();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+        else {
+            ans = solve(n,m);
+            for (int i=1; i<m; i++) {
+                long a = solve(n,i);
+                a = (a*solveRestrict(n,m-i))%md;
+                ans -= a;
+                if (ans<0) ans+=md;
             }
-        });
-
-        bufferedReader.close();
-        bufferedWriter.close();
+        }
+        waysRestrict[n][m] = (int)ans;
+        return waysRestrict[n][m];
+    }
+    public static void main (String[] args) {
+        Solution o = new Solution();
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            int a, b;
+            a = sc.nextInt(); b = sc.nextInt();
+            System.out.println(o.solveRestrict(a,b));
+        }
+        sc.close();
     }
 }
-
