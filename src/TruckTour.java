@@ -23,37 +23,18 @@ class TruckTour {
     public static int truckTour(List<List<Integer>> petrolpumps) {
         // Write your code here
         int size = petrolpumps.size();
-        long petrol ;
-        long distance ;
-        boolean isPassed  ;
-        for(int i = 0 ;i < size; i++){
-            petrol = 0;
-            distance = 0;
-            isPassed = true;
-            for(int j = i ;j < size; j++){
-                petrol += petrolpumps.get(j).get(0);
-                distance += petrolpumps.get(j).get(1);
-                if(distance > petrol ){
-                    isPassed = false;
-                    break;
-                }
-
-            }
-
-            for(int x = 0;x < i;x++){
-                petrol += petrolpumps.get(x).get(0);
-                distance += petrolpumps.get(x).get(1);
-                if(distance > petrol ){
-                    isPassed = false;
-                    break;
-                }
-            }
-
-            if(isPassed){
-                return i ;
+        long petrol = 0;
+        long distance = 0;
+        int start = 0;
+        for (int i = 0; i < size; i++) {
+            petrol += petrolpumps.get(i).get(0) - petrolpumps.get(i).get(1);
+            if (petrol < 0) {
+                distance += petrol;
+                petrol = 0;
+                start = i + 1;
             }
         }
-        return -1;
+        return distance + petrol >= 0 ? start : -1;
     }
 }
 
