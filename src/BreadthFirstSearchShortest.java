@@ -19,7 +19,6 @@ class Result008 {
      *  3. 2D_INTEGER_ARRAY edges
      *  4. INTEGER s
      */
-
     public static List<Integer> bfs(int n, int m, List<List<Integer>> edges, int s) {
         // Write your code here
         // Cria uma matriz de adjacência
@@ -57,6 +56,7 @@ class Result008 {
                 .filter(i -> i != s - 1)
                 .mapToObj(i -> distance[i] == Integer.MAX_VALUE ? -1 : distance[i])
                 .collect(Collectors.toList());
+
     }
 }
 

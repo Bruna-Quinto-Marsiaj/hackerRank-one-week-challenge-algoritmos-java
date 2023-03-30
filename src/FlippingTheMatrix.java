@@ -12,20 +12,29 @@ import static java.util.stream.Collectors.toList;
 
 class FlippingTheMatrix {
 
-    public static int flippingMatrix(List<List<Integer>> matrix) {
-        int sum = 0;
-        int size = matrix.size();
-        for (int i = 0; i < size/2; i++) {
-            for (int j = 0; j < size/2; j++) {
-                sum += Math.max( matrix.get(i).get(j),
-                        Math.max( matrix.get(i).get(size-1-j),
-                                Math.max( matrix.get(size-1-i).get(j),
-                                        matrix.get(size-1-i).get(size-1-j))
-                        )
-                );
+
+        public static int flippingMatrix(List<List<Integer>> matrix) {
+            int n = matrix.size() / 2;
+            int[][] arr = new int[2*n][2*n];
+            for (int i = 0; i < 2*n; i++) {
+                for (int j = 0; j < 2*n; j++) {
+                    arr[i][j] = matrix.get(i).get(j);
+                }
             }
-        }
-        return sum;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = Math.max(arr[i][j], arr[2*n-i-1][j]);
+                    arr[i][j] = Math.max(arr[i][j], arr[2*n-i-1][2*n-j-1]);
+                    arr[i][j] = Math.max(arr[i][j], arr[i][2*n-j-1]);
+                }
+            }
+            int sum = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    sum += arr[i][j];
+                }
+            }
+            return sum;
     }
 }
 
