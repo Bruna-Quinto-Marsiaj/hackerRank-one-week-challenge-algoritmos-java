@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class LegoBlocks {
+public class Solution13 {
     int md=1000000007;
     int[][] ways = new int[1001][1001];
     int[][] waysRestrict = new int[1001][1001];
