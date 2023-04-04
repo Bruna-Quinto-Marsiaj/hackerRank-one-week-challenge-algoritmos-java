@@ -26,15 +26,11 @@ class Resultbb2 {
         // Write your code here
         int num1 = a.get(a.size() - 1);
         int num2 = b.get(0);
-        int count = 0;
 
-        for (int i = num1; i <= num2; i += num1){
-            final int num = i;
-            if(a.stream().allMatch(j -> num % j == 0) && b.stream().allMatch(k-> k % num == 0)){
-                count++;
-            }
-        }
-        return count;
+        return (int) IntStream.rangeClosed(num1, num2)
+                .filter(num -> a.stream().allMatch(i -> num % i == 0))
+                .filter(num -> b.stream().allMatch(j -> j % num == 0))
+                .count();
     }
 
 }
