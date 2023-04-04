@@ -24,17 +24,13 @@ class Resultbb3 {
 
     public static int getTotalX(List<Integer> a, List<Integer> b) {
         // Write your code here
-        int num1 = a.get(a.size() - 1);
-        int num2 = b.get(0);
-        int count = 0;
+        int maxOfArr1 = Collections.max(a);
+        int minOfArr2 = Collections.min(b);
 
-        for (int i = num1; i <= num2; i += num1){
-            final int num = i;
-            if(a.stream().allMatch(j -> num % j == 0) && b.stream().allMatch(k-> k % num == 0)){
-                count++;
-            }
-        }
-        return count;
+        return (int) IntStream.rangeClosed(maxOfArr1, minOfArr2)
+                .filter(num -> a.stream().allMatch(i -> num % i == 0))
+                .filter(num -> b.stream().allMatch(j -> j % num == 0))
+                .count();
     }
 
 }
