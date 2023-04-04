@@ -1,18 +1,17 @@
-
 import java.io.*;
-        import java.math.*;
-        import java.security.*;
-        import java.text.*;
-        import java.util.*;
-        import java.util.concurrent.*;
-        import java.util.function.*;
-        import java.util.regex.*;
-        import java.util.stream.*;
-        import static java.util.stream.Collectors.joining;
-        import static java.util.stream.Collectors.toList;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 
-class Resultgg {
+class Resultggbd {
 
     /*
      * Complete the 'anagram' function below.
@@ -24,22 +23,20 @@ class Resultgg {
     public static int anagram(String s) {
         // Write your code here
         int n = s.length();
-        if (n % 2 != 0){
+        if (n % 2 != 0) {
             return -1;
         }
-        String s1 = s.substring(0, n/2);
-        String s2 = s.substring(n/2);
-        Map<Character, Integer> freq = new HashMap<>();
-
-        s1.chars(). forEach(c -> freq.put((char) c, freq.getOrDefault((char) c, 0) + 1));
+        int[] freq = new int[26];
+        for (int i = 0; i < n / 2; i++) {
+            freq[s.charAt(i) - 'a']++;
+        }
         int changes = 0;
-
-        for(int i = 0; i < s2.length(); i++){
-            char c = s2.charAt(i);
-            if(!freq.containsKey(c) || freq.get(c) == 0){
+        for (int i = n / 2; i < n; i++) {
+            int index = s.charAt(i) - 'a';
+            if (freq[index] == 0) {
                 changes++;
             } else {
-                freq.put(c, freq.get(c) - 1);
+                freq[index]--;
             }
         }
         return changes;
@@ -48,7 +45,7 @@ class Resultgg {
 
 }
 
-public class Anagram {
+public class Anagram3 {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
@@ -59,7 +56,7 @@ public class Anagram {
             try {
                 String s = bufferedReader.readLine();
 
-                int result = Resultgg.anagram(s);
+                int result = Resultggbd.anagram(s);
 
                 bufferedWriter.write(String.valueOf(result));
                 bufferedWriter.newLine();
@@ -72,4 +69,5 @@ public class Anagram {
         bufferedWriter.close();
     }
 }
+
 
